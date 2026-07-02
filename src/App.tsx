@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import './App.css'
 
@@ -12,9 +12,16 @@ import './App.css'
  
 
 function App() {
+
   const [value,setValue]=useState("")
 
-  const [list,setList]= useState<Lista[]>([])
+  const [list,setList]= useState<Lista[]>(()=>{
+    const savedList=localStorage.getItem("lista")
+    if(savedList!==null){
+      return JSON.parse(savedList)
+    }
+    return []
+  })
 
 
   function AdicionarValor(){
@@ -55,6 +62,10 @@ function App() {
     setList(apagando)
 
   }
+  useEffect(()=>{
+    localStorage.setItem("lista",JSON.stringify(list))
+
+  },[list])
 
 
   return (
